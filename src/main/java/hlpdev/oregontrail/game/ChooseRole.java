@@ -5,7 +5,8 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
-import hlpdev.oregontrail.menus.MainMenu;
+import hlpdev.oregontrail.Main;
+import hlpdev.oregontrail.Profession;
 
 public class ChooseRole {
 
@@ -55,6 +56,24 @@ public class ChooseRole {
         continueGame.setSize(new TerminalSize(12, 1));
         continueGame.addListener((_) -> {
             window.close();
+            switch (comboBox.getSelectedItem()) {
+                case "Banker from Boston": {
+                    Main.GameState.profession = Profession.BANKER;
+                    Main.GameState.totalMoney = 1600;
+                    break;
+                }
+                case "Carpenter from Ohio": {
+                    Main.GameState.profession = Profession.CARPENTER;
+                    Main.GameState.totalMoney = 800;
+                    break;
+                }
+                case "Farmer from Illinois": {
+                    Main.GameState.profession = Profession.FARMER;
+                    Main.GameState.totalMoney = 400;
+                    break;
+                }
+            }
+
             try {
                 ChooseName.Execute(terminal, screen);
             } catch (Exception e) {
