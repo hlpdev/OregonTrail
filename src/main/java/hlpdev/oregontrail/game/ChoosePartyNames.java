@@ -91,7 +91,7 @@ public class ChoosePartyNames {
 
             window.close();
             try {
-                //ChoosePartyNames.Execute(terminal, screen);
+                ChooseMonth.Execute(terminal, screen);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
