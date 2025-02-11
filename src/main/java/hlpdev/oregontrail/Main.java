@@ -6,6 +6,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.swing.SwingTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.SwingTerminalFrame;
 import hlpdev.oregontrail.menus.MainMenu;
+import hlpdev.oregontrail.util.OperatingSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +17,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         GameState = null;
 
+        short fontSize = 8;
+        if (OperatingSystem.isWindows()) {
+            fontSize = 16;
+        }
+
         // Create a swing terminal (essentially just a terminal emulator)
-        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorFontConfiguration(SwingTerminalFontConfiguration.getDefaultOfSize(8));
+        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorFontConfiguration(SwingTerminalFontConfiguration.getDefaultOfSize(fontSize));
         SwingTerminalFrame terminal = terminalFactory.createSwingTerminal();
         terminal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         terminal.setVisible(true);
