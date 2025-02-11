@@ -1,9 +1,5 @@
 package hlpdev.oregontrail;
 
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.bundle.LanternaThemes;
-import com.googlecode.lanterna.graphics.SimpleTheme;
-import com.googlecode.lanterna.graphics.Theme;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -13,7 +9,6 @@ import hlpdev.oregontrail.menus.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class Main {
     public static GameState GameState;
