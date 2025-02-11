@@ -6,6 +6,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.swing.SwingTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.SwingTerminalFrame;
 import hlpdev.oregontrail.menus.MainMenu;
+import hlpdev.oregontrail.util.ErrorHandler;
 import hlpdev.oregontrail.util.OperatingSystem;
 
 import javax.swing.*;
@@ -38,7 +39,11 @@ public class Main {
         screen.startScreen();
 
         // Go to the main menu
-        MainMenu.Execute(terminal, screen);
+        try {
+            MainMenu.Execute(terminal, screen);
+        } catch (Exception e) {
+            ErrorHandler.ShowError(terminal, screen, e);
+        }
 
         // Dispose of the screen and terminal
         screen.stopScreen();
