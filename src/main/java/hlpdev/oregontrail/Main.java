@@ -29,8 +29,9 @@ public class Main {
         terminal.setVisible(true);
         terminal.setTitle("The Oregon Trail (Java Remake)");
         terminal.setSize(new Dimension(825, 635));
-        terminal.setResizable(false);
+        terminal.setMinimumSize(new Dimension(825, 635));
         terminal.setCursorVisible(false);
+        terminal.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Create screen
         Screen screen = new TerminalScreen(terminal);
