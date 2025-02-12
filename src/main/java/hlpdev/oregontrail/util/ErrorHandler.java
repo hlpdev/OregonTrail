@@ -10,8 +10,10 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import java.io.IOException;
+
 public class ErrorHandler {
-    public static void ShowError(Terminal terminal, Screen screen, Exception e) {
+    public static void ShowError(Terminal terminal, Screen screen, Exception e) throws IOException {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(76, 28));
@@ -29,6 +31,7 @@ public class ErrorHandler {
                
                """, e.getMessage(), stackTrace);
 
+        terminal.bell();
         MessageDialog.showMessageDialog(textGui, "A Fatal Error Occurred", error, MessageDialogButton.Abort);
         System.exit(e.hashCode());
 
