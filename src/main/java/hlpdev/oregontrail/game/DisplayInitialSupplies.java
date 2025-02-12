@@ -7,18 +7,21 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
 
+import java.util.List;
+
 public class DisplayInitialSupplies {
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(76, 28));
+        window.setHints(List.of(Window.Hint.CENTERED));
 
         Panel panel = new Panel(new AbsoluteLayout());
 
         Label label = new Label(String.format("""
             Before leaving Independence you
             should buy equipment and
-            supplies. You have $%d.00 in
+            supplies. You have $%,.2f in
             cash, but you don't have to
             spend it all now.
             
@@ -35,7 +38,7 @@ public class DisplayInitialSupplies {
         continueButton.addListener((_) -> {
             window.close();
             try {
-                //DisplayInitialSupplies.Execute(terminal, screen);
+                MattsGeneralStore.Execute(terminal, screen);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
