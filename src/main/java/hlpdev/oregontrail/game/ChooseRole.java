@@ -8,12 +8,15 @@ import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
 import hlpdev.oregontrail.Profession;
 
+import java.util.List;
+
 public class ChooseRole {
 
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(76, 28));
+        window.setHints(List.of(Window.Hint.CENTERED));
 
         Panel panel = new Panel(new AbsoluteLayout());
 
@@ -92,6 +95,7 @@ public class ChooseRole {
             final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
             final Window window = new BasicWindow();
             window.setFixedSize(new TerminalSize(76, 28));
+            window.setHints(List.of(Window.Hint.CENTERED));
 
             Panel panel = new Panel(new AbsoluteLayout());
 
