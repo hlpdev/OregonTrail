@@ -7,25 +7,22 @@ import com.googlecode.lanterna.terminal.swing.SwingTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.SwingTerminalFrame;
 import hlpdev.oregontrail.menus.MainMenu;
 import hlpdev.oregontrail.util.ErrorHandler;
-import hlpdev.oregontrail.util.OperatingSystem;
+import hlpdev.oregontrail.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
     public static GameState GameState;
+    public static SwingTerminalFrame terminal;
 
     public static void main(String[] args) throws Exception {
         GameState = null;
-
-        short fontSize = 8;
-        if (OperatingSystem.isWindows()) {
-            fontSize = 16;
-        }
+        Settings.Load();
 
         // Create a swing terminal (essentially just a terminal emulator)
-        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorFontConfiguration(SwingTerminalFontConfiguration.getDefaultOfSize(fontSize));
-        SwingTerminalFrame terminal = terminalFactory.createSwingTerminal();
+        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorFontConfiguration(SwingTerminalFontConfiguration.getDefaultOfSize(Settings.Settings.FontSize));
+        terminal = terminalFactory.createSwingTerminal();
         terminal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         terminal.setVisible(true);
         terminal.setTitle("The Oregon Trail (Java Remake)");
