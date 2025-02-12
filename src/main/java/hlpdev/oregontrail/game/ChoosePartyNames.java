@@ -10,13 +10,14 @@ import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
 import hlpdev.oregontrail.PartyMember;
 
-import java.io.IOException;
+import java.util.List;
 
 public class ChoosePartyNames {
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(76, 28));
+        window.setHints(List.of(Window.Hint.CENTERED));
 
         Panel panel = new Panel(new AbsoluteLayout());
 
@@ -83,11 +84,6 @@ public class ChoosePartyNames {
             Main.GameState.partyMembers.add(new PartyMember(memberThreeInput.getText().trim(), 100, true, 0, false));
             Main.GameState.partyMembers.add(new PartyMember(memberFourInput.getText().trim(), 100, true, 0, false));
             Main.GameState.partyMembers.add(new PartyMember(memberFiveInput.getText().trim(), 100, true, 0, false));
-            try {
-                Main.GameState.Save();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
             window.close();
             try {
