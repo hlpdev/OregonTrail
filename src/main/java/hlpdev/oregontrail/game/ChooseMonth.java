@@ -8,12 +8,14 @@ import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ChooseMonth {
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(76, 28));
+        window.setHints(List.of(Window.Hint.CENTERED));
 
         Panel panel = new Panel(new AbsoluteLayout());
 
@@ -54,12 +56,7 @@ public class ChooseMonth {
         continueButton.setSize(new TerminalSize(18, 1));
         continueButton.setPosition(new TerminalPosition(2, 10));
         continueButton.addListener((_) -> {
-            Main.GameState.departureMonth = 3 + monthInput.getSelectedIndex();
-            try {
-                Main.GameState.Save();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            Main.GameState.departureMonth = 2 + monthInput.getSelectedIndex();
 
             window.close();
             try {
@@ -79,6 +76,7 @@ public class ChooseMonth {
             final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
             final Window window = new BasicWindow();
             window.setFixedSize(new TerminalSize(76, 28));
+            window.setHints(List.of(Window.Hint.CENTERED));
 
             Panel panel = new Panel(new AbsoluteLayout());
 
