@@ -14,7 +14,7 @@ public class GameState implements Serializable {
     public int currentWeek;
     public int departureMonth;
     public int totalDistanceTraveled;
-    public int totalMoney;
+    public double totalMoney;
     public Profession profession;
     public PartyMember playerMember;
 
@@ -29,13 +29,16 @@ public class GameState implements Serializable {
     public int food;
     public int ammunition;
     public int clothing;
-    public int wagonParts;
+    public int wagonWheels;
+    public int wagonAxles;
+    public int wagonTongues;
     public int medicine;
+    public int oxen;
 
     /**
      * <h2>Travel Information</h2>
      */
-    public String currentLocation;
+    public Location currentLocation;
     public Weather weatherCondition;
     public boolean isResting;
 
@@ -96,12 +99,15 @@ public class GameState implements Serializable {
         this.partyMembers = new ArrayList<>();
 
         this.food = 0;
-        this.ammunition = 20;
-        this.clothing = 5;
-        this.wagonParts = 2;
-        this.medicine = 2;
+        this.ammunition = 0;
+        this.clothing = 0;
+        this.wagonWheels = 0;
+        this.wagonAxles = 0;
+        this.wagonTongues = 0;
+        this.medicine = 0;
+        this.oxen = 0;
 
-        this.currentLocation = "Independence, Missouri";
+        this.currentLocation = Location.INDEPENDENCE;
         this.weatherCondition = Weather.CLEAR;
         this.isResting = false;
 
