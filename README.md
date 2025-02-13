@@ -13,14 +13,14 @@ an actual game instead of using 1000 if statements.
 
 ### Prerequisites
 * OpenJDK 23
-* * [Download OpenJDK](https://jdk.java.net/)
-* * Verify installation: 
+  * [Download OpenJDK](https://jdk.java.net/)
+  * Verify installation: 
     ```shell
     java -version
     ```
 * Apache Maven
-* * [Download Maven](https://maven.apache.org/download.cgi)
-* * Verify installation:
+  * [Download Maven](https://maven.apache.org/download.cgi)
+  * Verify installation:
     ```shell
     mvn -version
     ```
@@ -34,7 +34,7 @@ cd OregonTrail
 
 Compile and package:
 ```shell
-mvn clean package
+mvn clean compile assembly:single
 ```
 
 The output JAR will be in ``target/``
