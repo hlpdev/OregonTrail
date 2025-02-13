@@ -146,7 +146,7 @@ public class MattsGeneralStore {
                         6. Medicine                 $%,.2f
             """,
                 Main.GameState.oxen * 20.0f,
-                Main.GameState.food * 0.20f,
+                Main.GameState.food * 0.10f,
                 Main.GameState.clothing * 10.0f,
                 Main.GameState.ammunition * 0.10f,
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f,
@@ -165,7 +165,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
                             Total bill:             $%,.2f
             """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.10f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -331,7 +331,7 @@ public class MattsGeneralStore {
             }
 
             if (Main.GameState.oxen * 20.0f +
-                    Main.GameState.food * 0.20f +
+                    Main.GameState.food * 0.10f +
                     Main.GameState.clothing * 10.0f +
                     Main.GameState.ammunition * 0.10f +
                     (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -341,7 +341,7 @@ public class MattsGeneralStore {
             }
 
             Main.GameState.totalMoney -= Main.GameState.oxen * 20.0f +
-                    Main.GameState.food * 0.20f +
+                    Main.GameState.food * 0.10f +
                     Main.GameState.clothing * 10.0f +
                     Main.GameState.ammunition * 0.10f +
                     (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -414,7 +414,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.10f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -442,7 +442,7 @@ public class MattsGeneralStore {
             family. I see that you have
             5 people in all. You'll need
             flour, sugar, bacon, and
-            coffee. My price is 20
+            coffee. My price is 10
             cents a pound.
             
             How many pounds of food do you want?
@@ -486,7 +486,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.10f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -556,7 +556,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.10f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -624,7 +624,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.10f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -722,7 +722,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.10f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -797,7 +797,7 @@ public class MattsGeneralStore {
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.20f +
+                Main.GameState.food * 0.1f +
                 Main.GameState.clothing * 10.0f +
                 Main.GameState.ammunition * 0.10f +
                 (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
@@ -890,20 +890,26 @@ public class MattsGeneralStore {
                         ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
                                                          Independence
                                                          %s 1, 1848
+                        
+                             Your game will save from now on every time you travel on the trail.
+                              You may close the game and load it from your current position on
+                               the trail at any time. Be aware that if you exit during random
+                                               events that they will not save.
                         """, month);
 
         Label townArt = new Label(town);
         townArt.setPosition(new TerminalPosition(2, 1));
-        townArt.setSize(new TerminalSize(80, 26));
+        townArt.setSize(new TerminalSize(80, 31));
         panel.addComponent(townArt);
 
         Button continueButton = new Button("Continue");
-        continueButton.setPosition(new TerminalPosition(2, 29));
+        continueButton.setPosition(new TerminalPosition(2, 35));
         continueButton.setSize(new TerminalSize(12, 1));
         continueButton.addListener((_) -> {
             window.close();
             try {
-                Goodbye(terminal, screen);
+                Main.GameState.Save();
+                Progress.Execute(terminal, screen);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
