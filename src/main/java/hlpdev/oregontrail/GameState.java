@@ -1,5 +1,8 @@
 package hlpdev.oregontrail;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -64,7 +67,7 @@ public class GameState implements Serializable {
 
     public void Save() throws IOException {
         Path directory = Path.of(System.getProperty("user.home"), "/hlpdev/oregontrail/");
-        Path path = Path.of(directory.toString(), this.playerMember.name() + "-save.bin");
+        Path path = Path.of(directory.toString(), this.playerMember.name() + "-save.json");
 
         if (Files.notExists(directory)) {
             Files.createDirectories(directory);
@@ -74,17 +77,25 @@ public class GameState implements Serializable {
             Files.createFile(path);
         }
 
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(path.toString()))) {
-            outputStream.writeObject(this);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try (FileWriter writer = new FileWriter(path.toFile())) {
+            gson.toJson(this, writer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static GameState Load(String fileName) throws IOException, ClassNotFoundException {
+    public static GameState Load(String saveName) throws IOException, ClassNotFoundException {
         Path directory = Path.of(System.getProperty("user.home"), "/hlpdev/oregontrail/");
-        Path path = Path.of(directory.toString(), fileName + "-save.bin");
+        Path path = Path.of(directory.toString(), saveName + "-save.json");
 
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(path.toString()))) {
-            return (GameState) inputStream.readObject();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try (FileReader reader = new FileReader(path.toFile())) {
+            return gson.fromJson(reader, GameState.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
