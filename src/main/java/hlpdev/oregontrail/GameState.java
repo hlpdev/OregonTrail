@@ -14,7 +14,8 @@ public class GameState implements Serializable {
     /**
      * <h2>General Game Information</h2>
      */
-    public int currentWeek;
+    public int currentDay;
+    public int currentMonth;
     public int departureMonth;
     public int totalDistanceTraveled;
     public double totalMoney;
@@ -49,8 +50,7 @@ public class GameState implements Serializable {
      * <h2>Health & Morale Information</h2>
      */
     public int morale;
-    public int foodRations;
-    public int pace;
+    public Pace pace;
 
     /**
      * <h2>Special Encounters</h2>
@@ -100,7 +100,8 @@ public class GameState implements Serializable {
     }
 
     public GameState() {
-        this.currentWeek = 1;
+        this.currentDay = 1;
+        this.currentMonth = 0;
         this.departureMonth = 1;
         this.totalDistanceTraveled = 0;
         this.totalMoney = 0;
@@ -123,8 +124,7 @@ public class GameState implements Serializable {
         this.isResting = false;
 
         this.morale = 100;
-        this.foodRations = 3;
-        this.pace = 1;
+        this.pace = Pace.STEADY;
 
         this.hasBanditAttack = false;
         this.hasAccident = false;
