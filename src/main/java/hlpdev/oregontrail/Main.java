@@ -25,7 +25,7 @@ public class Main {
         terminal = terminalFactory.createSwingTerminal();
         terminal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         terminal.setVisible(true);
-        terminal.setTitle("The Oregon Trail (Java Remake)");
+        terminal.setTitle("The Oregon Trail - github.com/hlpdev/OregonTrail");
         terminal.setSize(new Dimension(825, 635));
         terminal.setMinimumSize(new Dimension(825, 635));
         terminal.setCursorVisible(false);
