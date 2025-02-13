@@ -80,10 +80,10 @@ public class ChoosePartyNames {
                 return;
             }
 
-            Main.GameState.partyMembers.add(new PartyMember(memberTwoInput.getText().trim(), 100, true, 0, false));
-            Main.GameState.partyMembers.add(new PartyMember(memberThreeInput.getText().trim(), 100, true, 0, false));
-            Main.GameState.partyMembers.add(new PartyMember(memberFourInput.getText().trim(), 100, true, 0, false));
-            Main.GameState.partyMembers.add(new PartyMember(memberFiveInput.getText().trim(), 100, true, 0, false));
+            Main.GameState.partyMembers.add(new PartyMember(memberTwoInput.getText().trim(), 100, true, 0, false, false));
+            Main.GameState.partyMembers.add(new PartyMember(memberThreeInput.getText().trim(), 100, true, 0, false, false));
+            Main.GameState.partyMembers.add(new PartyMember(memberFourInput.getText().trim(), 100, true, 0, false, false));
+            Main.GameState.partyMembers.add(new PartyMember(memberFiveInput.getText().trim(), 100, true, 0, false, false));
 
             window.close();
             try {

@@ -43,7 +43,7 @@ public class ChooseName {
                 return;
             }
 
-            Main.GameState.playerMember = new PartyMember(nameInput.getText().trim(), 100, true, 0, false);
+            Main.GameState.playerMember = new PartyMember(nameInput.getText().trim(), 100, true, 0, false, false);
 
             window.close();
             try {
