@@ -2,6 +2,11 @@ package hlpdev.oregontrail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import hlpdev.oregontrail.enums.Location;
+import hlpdev.oregontrail.enums.Pace;
+import hlpdev.oregontrail.enums.Profession;
+import hlpdev.oregontrail.enums.Weather;
+import hlpdev.oregontrail.records.PartyMember;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -7,6 +7,10 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.*;
+import hlpdev.oregontrail.enums.Location;
+import hlpdev.oregontrail.enums.Pace;
+import hlpdev.oregontrail.enums.Weather;
+import hlpdev.oregontrail.records.PartyMember;
 import hlpdev.oregontrail.util.Math;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package hlpdev.oregontrail;
+package hlpdev.oregontrail.enums;
 
 public enum Location {
     INDEPENDENCE(0, "Independence, Missouri", "Missouri Grasslands"),

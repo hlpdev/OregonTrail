@@ -6,7 +6,7 @@ import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
-import hlpdev.oregontrail.Profession;
+import hlpdev.oregontrail.enums.Profession;
 
 import java.util.List;
 

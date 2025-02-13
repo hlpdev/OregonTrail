@@ -1,4 +1,4 @@
-package hlpdev.oregontrail;
+package hlpdev.oregontrail.records;
 
 import java.io.Serializable;
 

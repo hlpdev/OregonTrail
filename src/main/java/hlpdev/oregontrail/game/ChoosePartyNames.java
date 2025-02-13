@@ -8,7 +8,7 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
-import hlpdev.oregontrail.PartyMember;
+import hlpdev.oregontrail.records.PartyMember;
 
 import java.util.List;
 

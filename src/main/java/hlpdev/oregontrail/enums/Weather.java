@@ -1,4 +1,4 @@
-package hlpdev.oregontrail;
+package hlpdev.oregontrail.enums;
 
 import java.util.ArrayList;
 import java.util.Collections;
