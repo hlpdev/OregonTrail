@@ -2,7 +2,7 @@
 This is a relative remake of the 1990s version of The Oregon Trail by MECC
 rewritten in Java with a terminal based UI. This was made for a Computer 
 Science project at Bridgewater State University. I got bored and recreated
-an actual game instead of using 1000 if statements.
+an actual game.
 
 ### Dependencies
 * Google's ***lanterna*** library - used for the terminal based UI
