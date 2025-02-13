@@ -7,6 +7,7 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
 import hlpdev.oregontrail.enums.Profession;
+import hlpdev.oregontrail.menus.MainMenu;
 
 import java.util.List;
 
@@ -84,6 +85,19 @@ public class ChooseRole {
             }
         });
         panel.addComponent(continueGame);
+
+        Button goBack = new Button("Go Back");
+        goBack.setPosition(new TerminalPosition(2, 14));
+        goBack.setSize(new TerminalSize(11, 1));
+        goBack.addListener((_) -> {
+            window.close();
+            try {
+                MainMenu.Execute(terminal, screen);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        panel.addComponent(goBack);
 
         window.setComponent(panel);
         textGui.addWindowAndWait(window);
