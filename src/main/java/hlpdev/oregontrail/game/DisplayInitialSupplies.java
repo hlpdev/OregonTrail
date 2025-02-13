@@ -38,7 +38,7 @@ public class DisplayInitialSupplies {
         continueButton.addListener((_) -> {
             window.close();
             try {
-                MattsGeneralStore.Execute(terminal, screen);
+                GeneralStore.Execute(terminal, screen);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

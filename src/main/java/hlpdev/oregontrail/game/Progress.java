@@ -3,6 +3,7 @@ package hlpdev.oregontrail.game;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.*;
@@ -81,6 +82,9 @@ public class Progress {
         suppliesButton.setPosition(new TerminalPosition(2, 13));
         suppliesButton.setSize(new TerminalSize(38, 1));
         panel.addComponent(suppliesButton);
+        suppliesButton.addListener((_) -> {
+            CheckSupplies(terminal, screen);
+        });
 
         Button mapButton = new Button("Look at the map");
         mapButton.setPosition(new TerminalPosition(2, 14));
@@ -119,6 +123,15 @@ public class Progress {
         buySuppliesButton.setPosition(new TerminalPosition(2, 19));
         buySuppliesButton.setSize(new TerminalSize(38, 1));
         panel.addComponent(buySuppliesButton);
+        buySuppliesButton.addListener((_) -> {
+            if (!atPointOfInterest) {
+                MessageDialog.showMessageDialog(textGui, "Whoops", "You're currently in the middle of no where, so you can't find a shop to purchase supplies at.");
+                return;
+            }
+
+            window.close();
+            GeneralStore.StoreMainMenu(terminal, screen, false);
+        });
 
         window.setComponent(panel);
         textGui.addWindowAndWait(window);
@@ -156,6 +169,54 @@ public class Progress {
         }
 
         return new Label(title);
+    }
+
+    private static void CheckSupplies(Terminal terminal, Screen screen) {
+        final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
+        final Window window = new BasicWindow();
+        window.setFixedSize(new TerminalSize(62, 28));
+        window.setHints(List.of(Window.Hint.CENTERED));
+
+        Panel panel = new Panel(new AbsoluteLayout());
+
+        Label inventory = new Label(String.format("""
+                Inventory:
+                
+                  Money: $%,.2f
+                  Food: %d lb%s
+                  Ammunition: %d round%s
+                  Clothing: %d set%s
+                  Wagon Wheels: %d
+                  Wagon Axles: %d
+                  Wagon Tongues: %d
+                  Medicine: %d pack%s
+                  Oxen: %d
+                """,
+                Main.GameState.totalMoney,
+                Main.GameState.food, Main.GameState.food == 1 ? "" : "s",
+                Main.GameState.ammunition, Main.GameState.ammunition == 1 ? "" : "s",
+                Main.GameState.clothing, Main.GameState.clothing == 1 ? "" : "s",
+                Main.GameState.wagonWheels,
+                Main.GameState.wagonAxles,
+                Main.GameState.wagonTongues,
+                Main.GameState.medicine, Main.GameState.medicine == 1 ? "" : "s",
+                Main.GameState.oxen
+        ));
+        inventory.setPosition(new TerminalPosition(2, 1));
+        inventory.setSize(new TerminalSize(30, 11));
+        panel.addComponent(inventory);
+
+        Button goBackButton = new Button("Go back");
+        goBackButton.setPosition(new TerminalPosition(2, 13));
+        goBackButton.setSize(new TerminalSize(11, 1));
+        panel.addComponent(goBackButton);
+        goBackButton.addListener((_) -> {
+            window.close();
+            Execute(terminal, screen);
+        });
+
+        window.setComponent(panel);
+        textGui.addWindowAndWait(window);
     }
 
     private static void ShowMap(Terminal terminal, Screen screen) {
@@ -199,6 +260,7 @@ public class Progress {
         goBackButton.setSize(new TerminalSize(11, 1));
         panel.addComponent(goBackButton);
         goBackButton.addListener((_) -> {
+            window.close();
             Execute(terminal, screen);
         });
 
@@ -240,6 +302,7 @@ public class Progress {
         panel.addComponent(goBackButton);
         goBackButton.addListener((_) -> {
             Main.GameState.pace = Pace.fromString(paceInput.getSelectedItem());
+            window.close();
             Execute(terminal, screen);
         });
 

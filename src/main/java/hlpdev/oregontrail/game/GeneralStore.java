@@ -11,7 +11,16 @@ import hlpdev.oregontrail.Main;
 
 import java.util.List;
 
-public class MattsGeneralStore {
+public class GeneralStore {
+    private static int purchasingFood = 0;
+    private static int purchasingAmmunition = 0;
+    private static int purchasingClothing = 0;
+    private static int purchasingWagonWheels = 0;
+    private static int purchasingWagonAxles = 0;
+    private static int purchasingWagonTongues = 0;
+    private static int purchasingMedicine = 0;
+    private static int purchasingOxen = 0;
+
     public static void Execute(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -42,7 +51,7 @@ public class MattsGeneralStore {
         continueButton.addListener((_) -> {
             window.close();
             try {
-                MattsGeneralStore.PartTwo(terminal, screen);
+                GeneralStore.PartTwo(terminal, screen);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -86,7 +95,7 @@ public class MattsGeneralStore {
         continueButton.addListener((_) -> {
             window.close();
             try {
-                StoreMainMenu(terminal, screen);
+                StoreMainMenu(terminal, screen, true);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -97,7 +106,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void StoreMainMenu(Terminal terminal, Screen screen) {
+    public static void StoreMainMenu(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -111,6 +120,11 @@ public class MattsGeneralStore {
             case 4 -> "May";
             case 5 -> "June";
             case 6 -> "July";
+            case 7 -> "August";
+            case 8 -> "September";
+            case 9 -> "October";
+            case 10 -> "November";
+            case 11 -> "December";
             default -> "";
         };
 
@@ -121,11 +135,22 @@ public class MattsGeneralStore {
         topBar.setSize(new TerminalSize(62, 1));
         panel.addComponent(topBar);
 
-        Label title = new Label(String.format("""
+        String titleLabel;
+        if (independence) {
+            titleLabel = String.format("""
                                 Matt's General Store
                                Independence, Missouri
                                     %s 1, 1848
-            """, month));
+            """, month);
+        } else {
+            titleLabel = String.format("""
+                                   General Store
+                               %s
+                                    %s %d, 1848
+            """, Main.GameState.currentLocation.name, month, Main.GameState.currentDay);
+        }
+
+        Label title = new Label(titleLabel);
         title.setPosition(new TerminalPosition(2, 2));
         title.setSize(new TerminalSize(62, 3));
         panel.addComponent(title);
@@ -145,12 +170,12 @@ public class MattsGeneralStore {
                         5. Spare parts              $%,.2f
                         6. Medicine                 $%,.2f
             """,
-                Main.GameState.oxen * 20.0f,
-                Main.GameState.food * 0.10f,
-                Main.GameState.clothing * 10.0f,
-                Main.GameState.ammunition * 0.10f,
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f,
-                Main.GameState.medicine * 5.0f));
+                purchasingOxen * 20.0f,
+                purchasingFood * 0.10f,
+                purchasingClothing * 10.0f,
+                purchasingAmmunition * 0.10f,
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f,
+                purchasingMedicine * 5.0f));
         storeItems.setPosition(new TerminalPosition(2, 6));
         storeItems.setSize(new TerminalSize(62, 6));
         panel.addComponent(storeItems);
@@ -164,12 +189,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
                             Total bill:             $%,.2f
-            """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.10f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+            """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 13));
         totalBill.setSize(new TerminalSize(62, 1));
         panel.addComponent(totalBill);
@@ -187,7 +212,7 @@ public class MattsGeneralStore {
         buyOxenButton.addListener((_) -> {
             window.close();
             try {
-                BuyOxen(terminal, screen);
+                BuyOxen(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -198,9 +223,9 @@ public class MattsGeneralStore {
         removeOxenButton.setPosition(new TerminalPosition(22, 17));
         removeOxenButton.setSize(new TerminalSize(22, 1));
         removeOxenButton.addListener((_) -> {
-            Main.GameState.oxen = 0;
+            purchasingOxen = 0;
             window.close();
-            MattsGeneralStore.StoreMainMenu(terminal, screen);
+            GeneralStore.StoreMainMenu(terminal, screen, independence);
         });
         panel.addComponent(removeOxenButton);
 
@@ -210,7 +235,7 @@ public class MattsGeneralStore {
         buyFoodButton.addListener((_) -> {
             window.close();
             try {
-                BuyFood(terminal, screen);
+                BuyFood(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -221,9 +246,9 @@ public class MattsGeneralStore {
         removeFoodButton.setPosition(new TerminalPosition(22, 18));
         removeFoodButton.setSize(new TerminalSize(22, 1));
         removeFoodButton.addListener((_) -> {
-            Main.GameState.food = 0;
+            purchasingFood = 0;
             window.close();
-            MattsGeneralStore.StoreMainMenu(terminal, screen);
+            GeneralStore.StoreMainMenu(terminal, screen, independence);
         });
         panel.addComponent(removeFoodButton);
 
@@ -233,7 +258,7 @@ public class MattsGeneralStore {
         buyClothingButton.addListener((_) -> {
             window.close();
             try {
-                BuyClothing(terminal, screen);
+                BuyClothing(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -244,9 +269,9 @@ public class MattsGeneralStore {
         removeClothingButton.setPosition(new TerminalPosition(22, 19));
         removeClothingButton.setSize(new TerminalSize(22, 1));
         removeClothingButton.addListener((_) -> {
-            Main.GameState.clothing = 0;
+            purchasingClothing = 0;
             window.close();
-            MattsGeneralStore.StoreMainMenu(terminal, screen);
+            GeneralStore.StoreMainMenu(terminal, screen, independence);
         });
         panel.addComponent(removeClothingButton);
 
@@ -256,7 +281,7 @@ public class MattsGeneralStore {
         buyAmmunitionButton.addListener((_) -> {
             window.close();
             try {
-                BuyAmmunition(terminal, screen);
+                BuyAmmunition(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -267,9 +292,9 @@ public class MattsGeneralStore {
         removeAmmunitionButton.setPosition(new TerminalPosition(22, 20));
         removeAmmunitionButton.setSize(new TerminalSize(22, 1));
         removeAmmunitionButton.addListener((_) -> {
-            Main.GameState.ammunition = 0;
+            purchasingAmmunition = 0;
             window.close();
-            MattsGeneralStore.StoreMainMenu(terminal, screen);
+            GeneralStore.StoreMainMenu(terminal, screen, independence);
         });
         panel.addComponent(removeAmmunitionButton);
 
@@ -279,7 +304,7 @@ public class MattsGeneralStore {
         buySparePartsButton.addListener((_) -> {
             window.close();
             try {
-                BuySpareParts(terminal, screen);
+                BuySpareParts(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -290,11 +315,11 @@ public class MattsGeneralStore {
         removeSparePartsButton.setPosition(new TerminalPosition(22, 21));
         removeSparePartsButton.setSize(new TerminalSize(22, 1));
         removeSparePartsButton.addListener((_) -> {
-            Main.GameState.wagonWheels = 0;
-            Main.GameState.wagonAxles = 0;
-            Main.GameState.wagonTongues = 0;
+            purchasingWagonWheels = 0;
+            purchasingWagonAxles = 0;
+            purchasingWagonTongues = 0;
             window.close();
-            MattsGeneralStore.StoreMainMenu(terminal, screen);
+            GeneralStore.StoreMainMenu(terminal, screen, independence);
         });
         panel.addComponent(removeSparePartsButton);
 
@@ -304,7 +329,7 @@ public class MattsGeneralStore {
         buyMedicineButton.addListener((_) -> {
             window.close();
             try {
-                BuyMedicine(terminal, screen);
+                BuyMedicine(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -315,9 +340,9 @@ public class MattsGeneralStore {
         removeMedicineButton.setPosition(new TerminalPosition(22, 22));
         removeMedicineButton.setSize(new TerminalSize(22, 1));
         removeMedicineButton.addListener((_) -> {
-            Main.GameState.medicine = 0;
+            purchasingMedicine = 0;
             window.close();
-            MattsGeneralStore.StoreMainMenu(terminal, screen);
+            GeneralStore.StoreMainMenu(terminal, screen, independence);
         });
         panel.addComponent(removeMedicineButton);
 
@@ -325,31 +350,53 @@ public class MattsGeneralStore {
         continueButton.setSize(new TerminalSize(18, 1));
         continueButton.setPosition(new TerminalPosition(2, 25));
         continueButton.addListener((_) -> {
-            if (Main.GameState.oxen == 0) {
+            if (purchasingOxen == 0 && independence) {
                 MessageDialog.showMessageDialog(textGui, "Warning", "Don't forget, you'll need oxen to pull your wagon.", MessageDialogButton.Retry);
                 return;
             }
 
-            if (Main.GameState.oxen * 20.0f +
-                    Main.GameState.food * 0.10f +
-                    Main.GameState.clothing * 10.0f +
-                    Main.GameState.ammunition * 0.10f +
-                    (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                    Main.GameState.medicine * 5.0f > Main.GameState.totalMoney) {
+            if (purchasingOxen * 20.0f +
+                    purchasingFood * 0.10f +
+                    purchasingClothing * 10.0f +
+                    purchasingAmmunition * 0.10f +
+                    (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                    purchasingMedicine * 5.0f > Main.GameState.totalMoney) {
                 MessageDialog.showMessageDialog(textGui, "Warning", "You can't afford this bill!", MessageDialogButton.Retry);
                 return;
             }
 
-            Main.GameState.totalMoney -= Main.GameState.oxen * 20.0f +
-                    Main.GameState.food * 0.10f +
-                    Main.GameState.clothing * 10.0f +
-                    Main.GameState.ammunition * 0.10f +
-                    (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                    Main.GameState.medicine * 5.0f;
+            Main.GameState.totalMoney -= purchasingOxen * 20.0f +
+                    purchasingFood * 0.10f +
+                    purchasingClothing * 10.0f +
+                    purchasingAmmunition * 0.10f +
+                    (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                    purchasingMedicine * 5.0f;
+
+            Main.GameState.oxen += purchasingOxen;
+            Main.GameState.food += purchasingFood;
+            Main.GameState.clothing += purchasingClothing;
+            Main.GameState.ammunition += purchasingAmmunition;
+            Main.GameState.wagonWheels += purchasingWagonWheels;
+            Main.GameState.wagonAxles += purchasingWagonAxles;
+            Main.GameState.wagonTongues += purchasingWagonTongues;
+            Main.GameState.medicine += purchasingMedicine;
+
+            purchasingOxen = 0;
+            purchasingFood = 0;
+            purchasingClothing = 0;
+            purchasingAmmunition = 0;
+            purchasingWagonWheels = 0;
+            purchasingWagonAxles = 0;
+            purchasingWagonTongues = 0;
+            purchasingMedicine = 0;
 
             window.close();
             try {
-                Leaving(terminal, screen);
+                if (independence) {
+                    Leaving(terminal, screen);
+                } else {
+                    Progress.Execute(terminal, screen);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -360,7 +407,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void BuyOxen(Terminal terminal, Screen screen) {
+    private static void BuyOxen(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -400,11 +447,11 @@ public class MattsGeneralStore {
                 return;
             }
 
-            Main.GameState.oxen += Integer.parseInt(input.getText()) * 2;
+            purchasingOxen += Integer.parseInt(input.getText()) * 2;
             window.close();
 
             try {
-                MattsGeneralStore.StoreMainMenu(terminal, screen);
+                GeneralStore.StoreMainMenu(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -413,12 +460,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
-           """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.10f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+           """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 14));
         totalBill.setSize(new TerminalSize(30, 1));
         panel.addComponent(totalBill);
@@ -427,7 +474,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void BuyFood(Terminal terminal, Screen screen) {
+    private static void BuyFood(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -472,11 +519,11 @@ public class MattsGeneralStore {
                 return;
             }
 
-            Main.GameState.food += Integer.parseInt(input.getText());
+            purchasingFood += Integer.parseInt(input.getText());
             window.close();
 
             try {
-                MattsGeneralStore.StoreMainMenu(terminal, screen);
+                GeneralStore.StoreMainMenu(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -485,12 +532,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
-           """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.10f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+           """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 18));
         totalBill.setSize(new TerminalSize(30, 1));
         panel.addComponent(totalBill);
@@ -499,7 +546,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void BuyClothing(Terminal terminal, Screen screen) {
+    private static void BuyClothing(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -542,11 +589,11 @@ public class MattsGeneralStore {
                 return;
             }
 
-            Main.GameState.clothing += Integer.parseInt(input.getText());
+            purchasingClothing += Integer.parseInt(input.getText());
             window.close();
 
             try {
-                MattsGeneralStore.StoreMainMenu(terminal, screen);
+                GeneralStore.StoreMainMenu(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -555,12 +602,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
-           """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.10f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+           """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 16));
         totalBill.setSize(new TerminalSize(30, 1));
         panel.addComponent(totalBill);
@@ -569,7 +616,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void BuyAmmunition(Terminal terminal, Screen screen) {
+    private static void BuyAmmunition(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -610,11 +657,11 @@ public class MattsGeneralStore {
                 return;
             }
 
-            Main.GameState.ammunition += Integer.parseInt(input.getText()) * 20;
+            purchasingAmmunition += Integer.parseInt(input.getText()) * 20;
             window.close();
 
             try {
-                MattsGeneralStore.StoreMainMenu(terminal, screen);
+                GeneralStore.StoreMainMenu(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -623,12 +670,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
-           """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.10f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+           """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 16));
         totalBill.setSize(new TerminalSize(30, 1));
         panel.addComponent(totalBill);
@@ -637,7 +684,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void BuySpareParts(Terminal terminal, Screen screen) {
+    private static void BuySpareParts(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -706,13 +753,13 @@ public class MattsGeneralStore {
                 return;
             }
 
-            Main.GameState.wagonWheels += Integer.parseInt(input1.getText());
-            Main.GameState.wagonAxles += Integer.parseInt(input2.getText());
-            Main.GameState.wagonTongues += Integer.parseInt(input3.getText());
+            purchasingWagonWheels += Integer.parseInt(input1.getText());
+            purchasingWagonAxles += Integer.parseInt(input2.getText());
+            purchasingWagonTongues += Integer.parseInt(input3.getText());
             window.close();
 
             try {
-                MattsGeneralStore.StoreMainMenu(terminal, screen);
+                GeneralStore.StoreMainMenu(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -721,12 +768,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
-           """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.10f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+           """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 19));
         totalBill.setSize(new TerminalSize(30, 1));
         panel.addComponent(totalBill);
@@ -735,7 +782,7 @@ public class MattsGeneralStore {
         textGui.addWindowAndWait(window);
     }
 
-    private static void BuyMedicine(Terminal terminal, Screen screen) {
+    private static void BuyMedicine(Terminal terminal, Screen screen, boolean independence) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -783,11 +830,11 @@ public class MattsGeneralStore {
                 return;
             }
 
-            Main.GameState.medicine += Integer.parseInt(input.getText());
+            purchasingMedicine += Integer.parseInt(input.getText());
             window.close();
 
             try {
-                MattsGeneralStore.StoreMainMenu(terminal, screen);
+                GeneralStore.StoreMainMenu(terminal, screen, independence);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -796,12 +843,12 @@ public class MattsGeneralStore {
 
         Label totalBill = new Label(String.format("""
            Bill so far:  $%,.2f
-           """, Main.GameState.oxen * 20.0f +
-                Main.GameState.food * 0.1f +
-                Main.GameState.clothing * 10.0f +
-                Main.GameState.ammunition * 0.10f +
-                (Main.GameState.wagonWheels + Main.GameState.wagonAxles + Main.GameState.wagonTongues) * 10.0f +
-                Main.GameState.medicine * 5.0f));
+           """, purchasingOxen * 20.0f +
+                purchasingFood * 0.10f +
+                purchasingClothing * 10.0f +
+                purchasingAmmunition * 0.10f +
+                (purchasingWagonWheels + purchasingWagonAxles + purchasingWagonTongues) * 10.0f +
+                purchasingMedicine * 5.0f));
         totalBill.setPosition(new TerminalPosition(2, 22));
         totalBill.setSize(new TerminalSize(30, 1));
         panel.addComponent(totalBill);
