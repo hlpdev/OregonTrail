@@ -57,7 +57,12 @@ public class MainMenu {
                     break;
                 }
                 case 1: {
-                    MessageDialog.showMessageDialog(textGui, "Warning", "Loading saves has not been implemented yet.", MessageDialogButton.OK);
+                    window.close();
+                    try {
+                        LoadMenu.Execute(terminal, screen);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 }
                 case 2: {
