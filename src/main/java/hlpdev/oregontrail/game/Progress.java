@@ -614,16 +614,19 @@ public class Progress {
 
         if (foodToRemove <= Main.GameState.food) {
             Main.GameState.food -= foodToRemove;
+            for (PartyMember member : Main.GameState.partyMembers) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newFoodConsumed(foodPerMember));
+            }
         } else {
             for (PartyMember member : Main.GameState.partyMembers) {
-                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newFoodConsumed(foodPerMember).newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
             }
         }
 
         for (PartyMember member : Main.GameState.partyMembers) {
             if (member.health() <= 0) {
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false));
-                MessageDialog.showMessageDialog(textGui, "", String.format("%s has starved to death.", member.name()));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s has died. You can bury them next time you rest for a few days.", member.name()));
             }
         }
 
@@ -641,9 +644,9 @@ public class Progress {
             }
         }
 
-        // TODO random events while resting
+        DoRandomEvent(textGui, atPointOfInterest);
 
-        MessageDialog.showMessageDialog(textGui, "", String.format("You rested for %d days", daysToRest));
+        MessageDialog.showMessageDialog(textGui, "", String.format("You rested for %d days", daysToRest), MessageDialogButton.OK);
         Execute(terminal, screen);
     }
 
@@ -756,7 +759,7 @@ public class Progress {
         giveMedicine.setSize(new TerminalSize(17, 1));
         panel.addComponent(giveMedicine);
         giveMedicine.addListener((_) -> {
-            if (member.health() >= 100) {
+            if (member.health() >= 100 && !member.hasDisease()) {
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s is in perfect condition!", member.name()), MessageDialogButton.OK);
                 return;
             }
@@ -766,8 +769,7 @@ public class Progress {
                 return;
             }
 
-            Main.GameState.partyMembers.remove(member);
-            Main.GameState.partyMembers.add(member.newHealth(java.lang.Math.min(member.health() + 45, 100)));
+            Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.min(member.health() + 45, 100)).newDisease(false));
 
             Main.GameState.medicine -= 1;
 
