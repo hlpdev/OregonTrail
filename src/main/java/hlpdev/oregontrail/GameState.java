@@ -56,6 +56,7 @@ public class GameState implements Serializable {
      */
     public int morale;
     public Pace pace;
+    public int stamina;
 
     /**
      * <h2>Special Encounters</h2>
@@ -130,6 +131,7 @@ public class GameState implements Serializable {
 
         this.morale = 100;
         this.pace = Pace.STEADY;
+        this.stamina = 100;
 
         this.hasBanditAttack = false;
         this.hasAccident = false;
