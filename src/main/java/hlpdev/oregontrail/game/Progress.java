@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class Progress {
     public static void Execute(Terminal terminal, Screen screen) {
@@ -144,6 +145,10 @@ public class Progress {
         restButton.setPosition(new TerminalPosition(2, 18));
         restButton.setSize(new TerminalSize(38, 1));
         panel.addComponent(restButton);
+        restButton.addListener((_) -> {
+            window.close();
+            StopToRest(terminal, screen);
+        });
 
         Button tradeButton = new Button("Attempt to trade");
         tradeButton.setPosition(new TerminalPosition(2, 19));
@@ -359,6 +364,63 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    private static void StopToRest(Terminal terminal, Screen screen) {
+        boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
+        Location pointOfInterest = atPointOfInterest ? Location.getPointOfInterest(Main.GameState.totalDistanceTraveled) : null;
+        Location closestLocation = Location.getClosestLocation(Main.GameState.totalDistanceTraveled);
+
+        final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
+
+        int daysToRest = new Random().nextInt(5) + 1;
+
+        Main.GameState.stamina = 100;
+
+        Main.GameState.currentDay += daysToRest;
+        Main.GameState.daysElapsed += daysToRest;
+
+        if (Main.GameState.currentDay >= 28) {
+            Main.GameState.currentDay = 1;
+            Main.GameState.currentMonth += 1;
+        }
+
+        int foodToRemove = new Random().nextInt(50);
+        int foodPerMember = foodToRemove / Main.GameState.partyMembers.size();
+
+        if (foodToRemove <= Main.GameState.food) {
+            Main.GameState.food -= foodToRemove;
+        } else {
+            for (PartyMember member : Main.GameState.partyMembers) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newFoodConsumed(foodPerMember).newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
+            }
+        }
+
+        for (PartyMember member : Main.GameState.partyMembers) {
+            if (member.health() <= 0) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s has starved to death.", member.name()));
+            }
+        }
+
+        String deathLocation;
+        if (atPointOfInterest) {
+            assert pointOfInterest != null;
+            deathLocation = "at " + pointOfInterest.name;
+        } else {
+            deathLocation = "in the " + closestLocation.relativeLocation;
+        }
+        for (PartyMember member : Main.GameState.partyMembers) {
+            if (!member.isAlive() && !member.hasBeenBuried()) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newBuried(true));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s has been buried %s.", member.name(), deathLocation));
+            }
+        }
+
+        // TODO random events while resting
+
+        MessageDialog.showMessageDialog(textGui, "", String.format("You rested for %d days", daysToRest));
+        Execute(terminal, screen);
+    }
+
     private static void AttemptToTrade(Terminal terminal, Screen screen) {
         @NotNull Location pointOfInterest = Objects.requireNonNull(Location.getPointOfInterest(Main.GameState.totalDistanceTraveled));
 
@@ -376,9 +438,8 @@ public class Progress {
         }
 
         Trade trade = Trading.getRandomTrade();
-        if (Objects.requireNonNull(trade).Execute(textGui, window, panel)) {
-            pointOfInterest.tradesAvailable -= 1;
-        }
+        Objects.requireNonNull(trade).Execute(textGui, window, panel);
+        pointOfInterest.tradesAvailable -= 1;
 
         Execute(terminal, screen);
     }
@@ -469,6 +530,11 @@ public class Progress {
         giveMedicine.setSize(new TerminalSize(17, 1));
         panel.addComponent(giveMedicine);
         giveMedicine.addListener((_) -> {
+            if (member.health() >= 100) {
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s is in perfect condition!", member.name()), MessageDialogButton.OK);
+                return;
+            }
+
             if (Main.GameState.medicine == 0) {
                 MessageDialog.showMessageDialog(textGui, "", "You have no medicine left in your wagon!", MessageDialogButton.OK);
                 return;
@@ -476,6 +542,8 @@ public class Progress {
 
             Main.GameState.partyMembers.remove(member);
             Main.GameState.partyMembers.add(member.newHealth(java.lang.Math.min(member.health() + 45, 100)));
+
+            Main.GameState.medicine -= 1;
 
             MessageDialog.showMessageDialog(textGui, "", String.format("You gave %s medicine...", member.name()), MessageDialogButton.OK);
             window.close();

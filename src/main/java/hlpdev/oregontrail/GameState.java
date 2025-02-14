@@ -49,7 +49,6 @@ public class GameState implements Serializable {
      */
     public Location currentLocation;
     public Weather weatherCondition;
-    public boolean isResting;
 
     /**
      * <h2>Health & Morale Information</h2>
@@ -64,11 +63,14 @@ public class GameState implements Serializable {
     public boolean hasBanditAttack;
     public boolean hasAccident;
     public boolean hasRiverCrossing;
+    public boolean hasBearAttack;
+    public boolean hasSnakeAttack;
+    public boolean hasRandomDeath;
+    public boolean hasRandomSickness;
 
     /**
      * <h2>Other Game-Specific Variables</h2>
      */
-    public boolean hasReachedOregon;
     public int daysElapsed;
 
     public void Save() throws IOException {
@@ -127,7 +129,6 @@ public class GameState implements Serializable {
 
         this.currentLocation = Location.INDEPENDENCE;
         this.weatherCondition = Weather.CLEAR;
-        this.isResting = false;
 
         this.morale = 100;
         this.pace = Pace.STEADY;
@@ -136,8 +137,11 @@ public class GameState implements Serializable {
         this.hasBanditAttack = false;
         this.hasAccident = false;
         this.hasRiverCrossing = false;
+        this.hasBearAttack = false;
+        this.hasSnakeAttack = false;
+        this.hasRandomDeath = false;
+        this.hasRandomSickness = false;
 
-        this.hasReachedOregon = false;
         this.daysElapsed = 0;
     }
 }
