@@ -63,7 +63,6 @@ public class GameState implements Serializable {
     public boolean hasBearAttack;
     public boolean hasSnakeAttack;
     public boolean hasRandomDeath;
-    public boolean hasRandomSickness;
 
     /**
      * <h2>Other Game-Specific Variables</h2>
