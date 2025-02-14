@@ -127,18 +127,15 @@ public class GameState implements Serializable {
         this.currentLocation = Location.INDEPENDENCE;
         this.weatherCondition = Weather.CLEAR;
 
-        this.morale = 100;
         this.pace = Pace.STEADY;
         this.stamina = 100;
 
         this.hasBanditAttack = false;
-        this.hasAccident = false;
-        this.hasRiverCrossing = false;
         this.hasBearAttack = false;
         this.hasSnakeAttack = false;
         this.hasRandomDeath = false;
-        this.hasRandomSickness = false;
 
         this.daysElapsed = 0;
+        this.animalsKilled = 0;
     }
 }
