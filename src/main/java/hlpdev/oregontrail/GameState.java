@@ -65,9 +65,10 @@ public class GameState implements Serializable {
     public boolean hasRandomDeath;
 
     /**
-     * <h2>Other Game-Specific Variables</h2>
+     * <h2>Other Game-Specific & Statistical Variables</h2>
      */
     public int daysElapsed;
+    public int animalsKilled;
 
     public void Save() throws IOException {
         Path directory = Path.of(System.getProperty("user.home"), "/hlpdev/oregontrail/");
