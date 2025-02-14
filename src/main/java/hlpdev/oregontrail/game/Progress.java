@@ -186,6 +186,20 @@ public class Progress {
             GeneralStore.StoreMainMenu(terminal, screen, false);
         });
 
+        Button goHuntingButton = new Button("Go hunting");
+        goHuntingButton.setPosition(new TerminalPosition(2, 22));
+        goHuntingButton.setSize(new TerminalSize(38, 1));
+        panel.addComponent(goHuntingButton);
+        goHuntingButton.addListener((_) -> {
+            if (Main.GameState.ammunition <= 0) {
+                MessageDialog.showMessageDialog(textGui, "Whoops", "You don't have any ammunition to go hunting with.", MessageDialogButton.OK);
+                return;
+            }
+
+            window.close();
+            GoHunting(terminal, screen);
+        });
+
         window.setComponent(panel);
         textGui.addWindowAndWait(window);
     }
@@ -773,5 +787,23 @@ public class Progress {
 
         window.setComponent(panel);
         textGui.addWindowAndWait(window);
+    }
+
+    private static void GoHunting(Terminal terminal, Screen screen) {
+        final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
+
+        int ammoUsed = new Random().nextInt(java.lang.Math.min(90, Main.GameState.ammunition - 1) + 1);
+        Main.GameState.ammunition -= ammoUsed;
+
+        int animalsKilled = (int) java.lang.Math.ceil(new Random().nextDouble(ammoUsed / 8.0));
+        int foodAdded = animalsKilled * new Random().nextInt(5, 50);
+
+        Main.GameState.food += foodAdded;
+
+        MessageDialog.showMessageDialog(textGui, "", String.format("You killed %d animals and used %d rounds of ammunition. %d lbs of food has been added to your supplies.", animalsKilled, ammoUsed, foodAdded), MessageDialogButton.OK);
+
+        Main.GameState.animalsKilled += animalsKilled;
+
+        Execute(terminal, screen);
     }
 }
