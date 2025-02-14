@@ -16,7 +16,6 @@ import hlpdev.oregontrail.npcs.Trade;
 import hlpdev.oregontrail.npcs.Trading;
 import hlpdev.oregontrail.records.PartyMember;
 import hlpdev.oregontrail.util.Math;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -422,7 +421,7 @@ public class Progress {
     }
 
     private static void AttemptToTrade(Terminal terminal, Screen screen) {
-        @NotNull Location pointOfInterest = Objects.requireNonNull(Location.getPointOfInterest(Main.GameState.totalDistanceTraveled));
+        Location pointOfInterest = Objects.requireNonNull(Location.getPointOfInterest(Main.GameState.totalDistanceTraveled));
 
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -497,7 +496,7 @@ public class Progress {
     }
 
     private static void TalkToPerson(Terminal terminal, Screen screen, String name) {
-        @NotNull PartyMember member = Main.GameState.partyMembers.stream().filter(partyMember -> partyMember.name().equals(name)).findFirst().get();
+        PartyMember member = Main.GameState.partyMembers.stream().filter(partyMember -> partyMember.name().equals(name)).findFirst().get();
 
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
