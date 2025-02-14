@@ -1,5 +1,6 @@
 package hlpdev.oregontrail.game;
 
+import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.*;
@@ -8,6 +9,7 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 import hlpdev.oregontrail.Main;
+import hlpdev.oregontrail.npcs.Names;
 
 import java.util.List;
 
@@ -144,15 +146,16 @@ public class GeneralStore {
             """, month);
         } else {
             titleLabel = String.format("""
-                                   General Store
+                          %s's General Store
                                %s
                                     %s %d, 1848
-            """, Main.GameState.currentLocation.name, month, Main.GameState.currentDay);
+            """, Names.getRandomName(), Main.GameState.currentLocation.name, month, Main.GameState.currentDay);
         }
 
         Label title = new Label(titleLabel);
         title.setPosition(new TerminalPosition(2, 2));
         title.setSize(new TerminalSize(62, 3));
+        title.addStyle(SGR.BOLD);
         panel.addComponent(title);
 
         Label bottomBar = new Label("""
