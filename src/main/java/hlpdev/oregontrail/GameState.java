@@ -53,7 +53,6 @@ public class GameState implements Serializable {
     /**
      * <h2>Health & Morale Information</h2>
      */
-    public int morale;
     public Pace pace;
     public int stamina;
 
