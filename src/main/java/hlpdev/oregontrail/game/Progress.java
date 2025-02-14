@@ -79,10 +79,6 @@ public class Progress {
         window.setFixedSize(new TerminalSize(62, 28));
         window.setHints(List.of(Window.Hint.CENTERED));
 
-        if (atPointOfInterest && pointOfInterest != Location.INDEPENDENCE && pointOfInterest != Location.OREGON_CITY) {
-            MessageDialog.showMessageDialog(textGui, "Attention", "You have reached a point of interest! You may buy supplies and attempt to trade!", MessageDialogButton.Continue);
-        }
-
         Panel panel = new Panel(new AbsoluteLayout());
 
         Label titleLabel = getTitleLabel(atPointOfInterest, pointOfInterest, closestLocation);
@@ -112,6 +108,10 @@ public class Progress {
         continueButton.setPosition(new TerminalPosition(2, 14));
         continueButton.setSize(new TerminalSize(38, 1));
         panel.addComponent(continueButton);
+        continueButton.addListener((_) -> {
+            window.close();
+            Continue(terminal, screen);
+        });
 
         Button suppliesButton = new Button("Check Supplies");
         suppliesButton.setPosition(new TerminalPosition(2, 15));
@@ -222,6 +222,219 @@ public class Progress {
         }
 
         return new Label(title);
+    }
+
+    private static void Continue(Terminal terminal, Screen screen) {
+        final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
+
+        if (Main.GameState.stamina == 0) {
+            MessageDialog.showMessageDialog(textGui, "", "Your group's stamina has reached zero, you must rest for a few days before continuing.", MessageDialogButton.OK);
+            Execute(terminal, screen);
+        }
+
+        int daysToWalk = (int)new Random().nextDouble(5 * Main.GameState.pace.speedMultiplier) + 1;
+
+        Main.GameState.stamina = java.lang.Math.max(0, Main.GameState.stamina - daysToWalk * 5);
+
+        Main.GameState.totalDistanceTraveled += daysToWalk * new Random().nextInt(10);
+
+        Main.GameState.currentDay += daysToWalk;
+        Main.GameState.daysElapsed += daysToWalk;
+
+        if (Main.GameState.currentDay >= 28) {
+            Main.GameState.currentDay = 1;
+            Main.GameState.currentMonth += 1;
+        }
+
+        if (Main.GameState.currentMonth > 10) {
+            MessageDialog.showMessageDialog(textGui, "", "It's now December, and the temperature is way to cold to continue. Your journey is over.", MessageDialogButton.OK);
+            System.exit(0);
+        }
+
+        int foodToRemove = new Random().nextInt((int)(50 * Main.GameState.pace.foodConsumptionMultiplier));
+        int foodPerMember = foodToRemove / Main.GameState.partyMembers.size();
+
+        if (foodToRemove <= Main.GameState.food) {
+            Main.GameState.food -= foodToRemove;
+            for (PartyMember member : Main.GameState.partyMembers) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newFoodConsumed(foodPerMember));
+            }
+        } else {
+            for (PartyMember member : Main.GameState.partyMembers) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
+            }
+        }
+
+        for (PartyMember member : Main.GameState.partyMembers) {
+            if (member.hasDisease()) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
+            }
+        }
+
+        for (PartyMember member : Main.GameState.partyMembers) {
+            if (member.health() <= 0 && new Random().nextBoolean()) {
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s has died. You can bury them next time you rest for a few days.", member.name()));
+            }
+        }
+
+        boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
+        Location pointOfInterest = atPointOfInterest ? Location.getPointOfInterest(Main.GameState.totalDistanceTraveled) : null;
+        Location closestLocation = Location.getClosestLocation(Main.GameState.totalDistanceTraveled);
+
+        if (atPointOfInterest) {
+            assert pointOfInterest != null;
+            MessageDialog.showMessageDialog(textGui, "", String.format("You walked for %d days and arrived at %s.", daysToWalk, pointOfInterest.name), MessageDialogButton.OK);
+        } else {
+            MessageDialog.showMessageDialog(textGui, "", String.format("You walked for %d days and are in the %s.", daysToWalk, closestLocation.relativeLocation));
+        }
+
+        if (atPointOfInterest && pointOfInterest != Location.INDEPENDENCE && pointOfInterest != Location.OREGON_CITY) {
+            MessageDialog.showMessageDialog(textGui, "Attention", "You have reached a point of interest! You may buy supplies and attempt to trade!", MessageDialogButton.Continue);
+        }
+
+        DoRandomEvent(textGui, atPointOfInterest);
+
+        Execute(terminal, screen);
+    }
+
+    private static void DoRandomEvent(WindowBasedTextGUI textGui, boolean atPointOfInterest) {
+        if (!atPointOfInterest) {
+            if (!Main.GameState.hasSnakeAttack && new Random().nextInt(1, 10) > 7) {
+                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(90))));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s got bitten by a snake and has suffered major injuries! Make sure to check on them soon!", member.name()));
+
+                Main.GameState.hasSnakeAttack = true;
+                return;
+            }
+
+            if (!Main.GameState.hasBearAttack && new Random().nextInt(1, 10) > 7) {
+                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s got attacked by a bear and has suffered major injuries! Make sure to check on them soon!", member.name()));
+
+                Main.GameState.hasBearAttack = true;
+                return;
+            }
+
+            // Random accident
+            if (new Random().nextInt(1, 10) > 7) {
+                String[] part = { "axle", "tongue", "wheel" };
+                String selectedPart = part[new Random().nextInt(part.length)];
+
+                MessageDialog.showMessageDialog(textGui, "", String.format("Your wagon's %s has been damaged.", selectedPart), MessageDialogButton.OK);
+
+                switch (selectedPart) {
+                    case "axle": {
+                        if (Main.GameState.wagonAxles <= 0) {
+                            MessageDialog.showMessageDialog(textGui, "", String.format("You don't have any spare %ss and have been stranded. Your game is over.", selectedPart));
+                            System.exit(0);
+                        }
+
+                        MessageDialog.showMessageDialog(textGui, "", String.format("You have used 1 spare %s to fix your wagon.", selectedPart));
+                        Main.GameState.wagonAxles -= 1;
+                        break;
+                    }
+                    case "tongue": {
+                        if (Main.GameState.wagonTongues <= 0) {
+                            MessageDialog.showMessageDialog(textGui, "", String.format("You don't have any spare %ss and have been stranded. Your game is over.", selectedPart));
+                            System.exit(0);
+                        }
+
+                        MessageDialog.showMessageDialog(textGui, "", String.format("You have used 1 spare %s to fix your wagon.", selectedPart));
+                        Main.GameState.wagonTongues -= 1;
+                        break;
+                    }
+                    case "wheel": {
+                        if (Main.GameState.wagonWheels <= 0) {
+                            MessageDialog.showMessageDialog(textGui, "", String.format("You don't have any spare %ss and have been stranded. Your journey is over.", selectedPart));
+                            System.exit(0);
+                        }
+
+                        MessageDialog.showMessageDialog(textGui, "", String.format("You have used 1 spare %s to fix your wagon.", selectedPart));
+                        Main.GameState.wagonWheels -= 1;
+                        break;
+                    }
+                }
+                return;
+            }
+
+            if (!Main.GameState.hasRandomDeath && new Random().nextInt(1, 10) > 9) {
+                // Random death
+                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false).newHealth(0));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s had a heart attack and died. You can bury them next time you rest for a few days.", member.name()));
+
+                Main.GameState.hasRandomDeath = true;
+                return;
+            }
+
+            // Random sickness
+            if (new Random().nextInt(1, 10) > 7) {
+                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))).newDisease(true));
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s has fallen ill. Give them medication to reduce the risk of death.", member.name()));
+                return;
+            }
+
+            if (!Main.GameState.hasBanditAttack && new Random().nextInt(1, 10) > 7) {
+                MessageDialogButton initialResponse = MessageDialog.showMessageDialog(textGui, "", "A group of bandits have approached your wagon and are attempting to steal your supplies. Do you want to fight them?", MessageDialogButton.Yes, MessageDialogButton.No);
+
+                if (initialResponse == MessageDialogButton.No) {
+                    if (new Random().nextBoolean()) {
+                        double moneyToSteal = new Random().nextDouble(Main.GameState.totalMoney);
+
+                        MessageDialog.showMessageDialog(textGui, "", String.format("The bandits stole %,.2f of your cash and ran away.", moneyToSteal), MessageDialogButton.OK);
+                        Main.GameState.totalMoney -= moneyToSteal;
+                    } else {
+                        int foodToSteal = new Random().nextInt(Main.GameState.food);
+
+                        MessageDialog.showMessageDialog(textGui, "", String.format("The bandits stole %d lbs of your food and ran away.", foodToSteal), MessageDialogButton.OK);
+                        Main.GameState.food -= foodToSteal;
+                    }
+                } else {
+                    if (new Random().nextBoolean()) {
+                        MessageDialog.showMessageDialog(textGui, "", "You shot and hit one of the bandits causing a critical injury.", MessageDialogButton.OK);
+                        Main.GameState.ammunition -= 1;
+
+                        if (new Random().nextBoolean()) {
+                            MessageDialog.showMessageDialog(textGui, "", "They pulled out a rifle and fired a shot back at you and missed.", MessageDialogButton.OK);
+
+                            double money = new Random().nextDouble(1, 500);
+                            MessageDialog.showMessageDialog(textGui, "", String.format("The bandits ran away and dropped $%,.2f in cash on their way out.", money), MessageDialogButton.OK);
+                            Main.GameState.totalMoney += money;
+                        } else {
+                            MessageDialog.showMessageDialog(textGui, "", "They pulled out a rifle and fired a shot back at you.", MessageDialogButton.OK);
+                            if (new Random().nextBoolean()) {
+                                MessageDialog.showMessageDialog(textGui, "", "The shot hit you in the head. Your journey is over.", MessageDialogButton.OK);
+                                System.exit(0);
+                            } else {
+                                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                                MessageDialog.showMessageDialog(textGui, "", String.format("The shot hit %s causing a critical injury.", member.name()), MessageDialogButton.OK);
+
+                                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(65))));
+                            }
+                        }
+                    } else {
+                        PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                        MessageDialog.showMessageDialog(textGui, "", "You shot and missed while aiming at one of the bandits.", MessageDialogButton.OK);
+                        MessageDialog.showMessageDialog(textGui, "", String.format("They pulled a gun out and shot %s causing a critical injury and ran away.", member.name()), MessageDialogButton.OK);
+
+                        Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(new Random().nextInt(65)));
+                    }
+                }
+
+                Main.GameState.hasBanditAttack = true;
+                return;
+            }
+        }
     }
 
     private static void CheckSupplies(Terminal terminal, Screen screen) {
