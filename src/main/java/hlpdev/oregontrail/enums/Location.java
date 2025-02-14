@@ -1,27 +1,29 @@
 package hlpdev.oregontrail.enums;
 
 public enum Location {
-    INDEPENDENCE(0, "Independence, Missouri", "Missouri Grasslands"),
-    FORT_KEARNEY(100, "Fort Kearney, Nebraska", "Nebraska Grasslands"),
-    CHIMNEY_ROCK(200, "Chimney Rock, Nebraska", "Nebraska Grasslands"),
-    LARAMIE(300, "Laramie, Wyoming", "Wyoming Forests"),
-    INDEPENDENCE_ROCK(400, "Independence Rock, Wyoming", "Wyoming Desert"),
-    SOUTH_PASS(500, "South Pass, Wyoming", "Wyoming Forests"),
-    SODA_SPRINGS(600, "Soda Springs, Idaho", "Idaho Desert"),
-    FORT_HALL(700, "Fort Hall, Idaho", "Idaho Mountains"),
-    FORT_BOISE(800, "Fort Boise, Idaho", "Idaho Mountains"),
-    BLUE_MOUNTAINS(900, "Blue Mountains, Oregon", "Oregon Mountains"),
-    THE_DALLES(1000, "The Dalles, Oregon", "Oregon Forests"),
-    OREGON_CITY(1100, "Oregon City, Oregon", "Oregon Forests");
+    INDEPENDENCE(0, "Independence, Missouri", "Missouri Grasslands", 1),
+    FORT_KEARNEY(100, "Fort Kearney, Nebraska", "Nebraska Grasslands", 3),
+    CHIMNEY_ROCK(200, "Chimney Rock, Nebraska", "Nebraska Grasslands", 2),
+    LARAMIE(300, "Laramie, Wyoming", "Wyoming Forests", 4),
+    INDEPENDENCE_ROCK(400, "Independence Rock, Wyoming", "Wyoming Desert", 1),
+    SOUTH_PASS(500, "South Pass, Wyoming", "Wyoming Forests", 5),
+    SODA_SPRINGS(600, "Soda Springs, Idaho", "Idaho Desert", 3),
+    FORT_HALL(700, "Fort Hall, Idaho", "Idaho Mountains", 2),
+    FORT_BOISE(800, "Fort Boise, Idaho", "Idaho Mountains", 5),
+    BLUE_MOUNTAINS(900, "Blue Mountains, Oregon", "Oregon Mountains", 3),
+    THE_DALLES(1000, "The Dalles, Oregon", "Oregon Forests", 4),
+    OREGON_CITY(1100, "Oregon City, Oregon", "Oregon Forests", 0);
 
     public final int location;
     public final String name;
     public final String relativeLocation;
+    public int tradesAvailable;
 
-    Location(int location, String name, String relativeLocation) {
+    Location(int location, String name, String relativeLocation, int tradesAvailable) {
         this.location = location;
         this.name = name;
         this.relativeLocation = relativeLocation;
+        this.tradesAvailable = tradesAvailable;
     }
 
     public static Location getLocation(int location) {
