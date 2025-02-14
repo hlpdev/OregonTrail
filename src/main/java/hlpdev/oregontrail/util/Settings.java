@@ -13,7 +13,7 @@ public class Settings implements Serializable {
 
         if (Files.notExists(path)) {
             Settings = new Settings();
-            Settings.FontSize = 12;
+            Settings.FontSize = 10;
 
             Save();
         }
