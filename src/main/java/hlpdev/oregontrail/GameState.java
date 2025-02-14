@@ -60,8 +60,6 @@ public class GameState implements Serializable {
      * <h2>Special Encounters</h2>
      */
     public boolean hasBanditAttack;
-    public boolean hasAccident;
-    public boolean hasRiverCrossing;
     public boolean hasBearAttack;
     public boolean hasSnakeAttack;
     public boolean hasRandomDeath;
