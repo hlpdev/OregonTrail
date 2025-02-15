@@ -17,6 +17,7 @@ import hlpdev.oregontrail.npcs.Trading;
 import hlpdev.oregontrail.records.PartyMember;
 import hlpdev.oregontrail.util.Math;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -239,6 +240,12 @@ public class Progress {
     }
 
     private static void Continue(Terminal terminal, Screen screen) {
+        try {
+            Main.GameState.Save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
 
         if (Main.GameState.stamina == 0) {
