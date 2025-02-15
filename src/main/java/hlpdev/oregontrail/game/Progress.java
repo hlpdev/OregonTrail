@@ -26,8 +26,6 @@ public class Progress {
 
     /**
      * The main screen that the player will see during their journey.
-     * @param terminal
-     * @param screen
      */
     public static void Execute(Terminal terminal, Screen screen) {
         boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
@@ -212,10 +210,6 @@ public class Progress {
     /**
      * Gets the title label for the top of the progress menu, shows point of interest when at a point of interest,
      * or shows the relative location when not at a point of interest. Also shows the current date.
-     * @param atPointOfInterest
-     * @param pointOfInterest
-     * @param closestLocation
-     * @return
      */
     private static Label getTitleLabel(boolean atPointOfInterest, Location pointOfInterest, Location closestLocation) {
         String title;
@@ -262,6 +256,8 @@ public class Progress {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        Main.GameState.weatherCondition = Weather.getRandomWeather();
 
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
 
