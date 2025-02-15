@@ -918,7 +918,7 @@ public class Progress {
     private static void GoHunting(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
 
-        int ammoUsed = new Random().nextInt(java.lang.Math.min(90, Main.GameState.ammunition - 1) + 1);
+        int ammoUsed = new Random().nextInt(java.lang.Math.min(90, Main.GameState.ammunition - 1) + 2);
         Main.GameState.ammunition -= ammoUsed;
 
         int animalsKilled = (int) java.lang.Math.ceil(new Random().nextDouble(ammoUsed / 8.0));
