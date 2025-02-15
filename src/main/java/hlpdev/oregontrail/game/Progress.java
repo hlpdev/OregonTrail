@@ -23,21 +23,28 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Progress {
+
+    /**
+     * The main screen that the player will see during their journey.
+     * @param terminal
+     * @param screen
+     */
     public static void Execute(Terminal terminal, Screen screen) {
         boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
         Location pointOfInterest = atPointOfInterest ? Location.getPointOfInterest(Main.GameState.totalDistanceTraveled) : null;
         Location closestLocation = Location.getClosestLocation(Main.GameState.totalDistanceTraveled);
         Weather currentWeather = Main.GameState.weatherCondition;
 
-        List<PartyMember> partyMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
-        List<Integer> partyHealths = partyMembers.stream().map(PartyMember::health).toList();
-        int averageHealth;
+        List<PartyMember> partyMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList(); // Gets all alive members and returns a list
+        List<Integer> partyHealths = partyMembers.stream().map(PartyMember::health).toList(); // Gets a list of every alive-player's health
+        int averageHealth; // Average health or 100 if no members are alive
         if (!partyHealths.isEmpty()) {
             averageHealth = Math.average(partyHealths.toArray(new Integer[0]));
         } else {
             averageHealth = 100;
         }
 
+        // Creates a visual representation of the party's health
         String healthVisual;
         if (averageHealth > 80) {
             healthVisual = "Good";
@@ -49,6 +56,7 @@ public class Progress {
             healthVisual = "Very bad";
         }
 
+        // Creates a visual representation of the food remaining in stockpile
         String rationsVisual;
         if (Main.GameState.food > 200) {
             rationsVisual = "Filling";
@@ -62,6 +70,7 @@ public class Progress {
             rationsVisual = "Members are starving";
         }
 
+        // Creates a visual representation of the party's stamina
         String staminaVisual;
         if (Main.GameState.stamina > 70) {
             staminaVisual = "High";
@@ -200,6 +209,14 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Gets the title label for the top of the progress menu, shows point of interest when at a point of interest,
+     * or shows the relative location when not at a point of interest. Also shows the current date.
+     * @param atPointOfInterest
+     * @param pointOfInterest
+     * @param closestLocation
+     * @return
+     */
     private static Label getTitleLabel(boolean atPointOfInterest, Location pointOfInterest, Location closestLocation) {
         String title;
 
@@ -234,6 +251,11 @@ public class Progress {
         return new Label(title);
     }
 
+    /**
+     * Handles moving forward on the oregon trail. Handles party member death, and random events.
+     * @param terminal
+     * @param screen
+     */
     private static void Continue(Terminal terminal, Screen screen) {
         try {
             Main.GameState.Save();
@@ -248,7 +270,7 @@ public class Progress {
             Execute(terminal, screen);
         }
 
-        int daysToWalk = (int)new Random().nextDouble(5 * Main.GameState.pace.speedMultiplier) + 1;
+        int daysToWalk = (int)new Random().nextDouble(5 * Main.GameState.pace.speedMultiplier * Main.GameState.weatherCondition.speedMultiplier) + 1;
 
         Main.GameState.stamina = java.lang.Math.max(0, Main.GameState.stamina - daysToWalk * 5);
 
@@ -318,6 +340,11 @@ public class Progress {
         Execute(terminal, screen);
     }
 
+    /**
+     * Internal logic for random events that occur while on the trail or while resting
+     * @param textGui
+     * @param atPointOfInterest
+     */
     private static void DoRandomEvent(WindowBasedTextGUI textGui, boolean atPointOfInterest) {
         if (!atPointOfInterest) {
             if (!Main.GameState.hasSnakeAttack && new Random().nextInt(1, 10) > 7) {
@@ -530,6 +557,11 @@ public class Progress {
         }
     }
 
+    /**
+     * Displays all the supplies that are in stockpile
+     * @param terminal
+     * @param screen
+     */
     private static void CheckSupplies(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -578,6 +610,11 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Shows the player their current location relative to points of interest
+     * @param terminal
+     * @param screen
+     */
     private static void ShowMap(Terminal terminal, Screen screen) {
         boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
         Location pointOfInterest = atPointOfInterest ? Location.getPointOfInterest(Main.GameState.totalDistanceTraveled) : null;
@@ -627,6 +664,11 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Displays a menu to change the pace of the group
+     * @param terminal
+     * @param screen
+     */
     private static void ChangePace(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -669,6 +711,12 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Allows the group to stop and rest which refills stamina but can cause random events if they
+     * are not at a point of interest.
+     * @param terminal
+     * @param screen
+     */
     private static void StopToRest(Terminal terminal, Screen screen) {
         boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
         Location pointOfInterest = atPointOfInterest ? Location.getPointOfInterest(Main.GameState.totalDistanceTraveled) : null;
@@ -729,6 +777,12 @@ public class Progress {
         Execute(terminal, screen);
     }
 
+    /**
+     * Shows a menu which allows you to trade with a random trader if there are still trades available
+     * at a given point of interest.
+     * @param terminal
+     * @param screen
+     */
     private static void AttemptToTrade(Terminal terminal, Screen screen) {
         Location pointOfInterest = Objects.requireNonNull(Location.getPointOfInterest(Main.GameState.totalDistanceTraveled));
 
@@ -752,6 +806,11 @@ public class Progress {
         Execute(terminal, screen);
     }
 
+    /**
+     * Allows the player to check the health status of the party members.
+     * @param terminal
+     * @param screen
+     */
     private static void TalkToPeople(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -804,6 +863,12 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Shows a menu when talking to a specific party member
+     * @param terminal
+     * @param screen
+     * @param name
+     */
     private static void TalkToPerson(Terminal terminal, Screen screen, String name) {
         PartyMember member = Main.GameState.partyMembers.stream().filter(partyMember -> partyMember.name().equals(name)).findFirst().get();
 
@@ -870,6 +935,11 @@ public class Progress {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Handles hunting, removes ammo & gives food at random.
+     * @param terminal
+     * @param screen
+     */
     private static void GoHunting(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
 

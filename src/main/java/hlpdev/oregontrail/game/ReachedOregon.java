@@ -10,6 +10,11 @@ import hlpdev.oregontrail.Main;
 import java.util.List;
 
 public class ReachedOregon {
+    /**
+     * Displays the final menu of the game with congratulations & total points scored
+     * @param terminal
+     * @param screen
+     */
     public static void Execute(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -78,6 +83,9 @@ public class ReachedOregon {
         textGui.addWindowAndWait(window);
     }
 
+    /**
+     * Shows the player's full points breakdown and which categories earned how many points
+     */
     private static void PointsBreakdown(Terminal terminal, Screen screen, int cashPoints, int huntingPoints, int foodPoints, int ammunitionPoints, int clothingPoints, int wagonWheelPoints, int wagonAxlePoints, int wagonTonguePoints, int medicinePoints, int oxenPoints, int memberPoints, double multiplier, int total) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();

@@ -10,6 +10,12 @@ import hlpdev.oregontrail.Main;
 import java.util.List;
 
 public class DisplayInitialSupplies {
+    /**
+     * Displays the player's initial money (changes based on profession)
+     * @param terminal
+     * @param screen
+     * @throws Exception
+     */
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();

@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.*;
 
 public abstract class Trading {
+    /**
+     * Uses reflection to pick a random class derived from the Trade interface to display to the player
+     * @return A random Trade-derived class instance
+     */
     public static Trade getRandomTrade() {
         List<Class<? extends Trade>> trades = new ArrayList<>();
         try {
@@ -32,6 +36,11 @@ public abstract class Trading {
         }
     }
 
+    /**
+     * Returns classes which derive from the Trade interface in the given directory within the compiled jar
+     * @param directory The directory to search in
+     * @return A list of classes that are derived from the Trade interface within the given directory
+     */
     private static List<Class<? extends Trade>> findClassesInDirectory(String directory) {
         List<Class<? extends Trade>> trades = new ArrayList<>();
 

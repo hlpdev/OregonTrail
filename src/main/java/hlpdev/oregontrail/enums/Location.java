@@ -1,5 +1,12 @@
 package hlpdev.oregontrail.enums;
 
+/**
+ * The Location enum stores all the points of interests the player can arrive at.
+ * Each location stores a location integer which relates to the player's distance traveled.
+ * Each location stores their visual name (city + state)
+ * Each location stores their relative location (state + terrain)
+ * Each location stores a number of trades that are available at a given location
+ */
 public enum Location {
     INDEPENDENCE(0, "Independence, Missouri", "Missouri Grasslands", 1),
     FORT_KEARNEY(100, "Fort Kearney, Nebraska", "Nebraska Grasslands", 3),

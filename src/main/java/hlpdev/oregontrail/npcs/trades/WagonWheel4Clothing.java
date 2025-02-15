@@ -13,6 +13,9 @@ import hlpdev.oregontrail.util.Pair;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * Trades wagon wheels for clothing
+ */
 @SuppressWarnings("unused")
 public final class WagonWheel4Clothing implements Trade {
     public WagonWheel4Clothing() {

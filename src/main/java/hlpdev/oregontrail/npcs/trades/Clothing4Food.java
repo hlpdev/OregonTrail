@@ -13,7 +13,9 @@ import hlpdev.oregontrail.util.Pair;
 import java.util.Collections;
 import java.util.Random;
 
-
+/**
+ * Trades clothing for food
+ */
 @SuppressWarnings("unused")
 public final class Clothing4Food  implements Trade {
     public Clothing4Food() {

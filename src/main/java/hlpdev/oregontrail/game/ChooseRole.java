@@ -13,6 +13,12 @@ import java.util.List;
 
 public class ChooseRole {
 
+    /**
+     * Displays a menu to have the player select their profession (difficulty)
+     * @param terminal
+     * @param screen
+     * @throws Exception
+     */
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();

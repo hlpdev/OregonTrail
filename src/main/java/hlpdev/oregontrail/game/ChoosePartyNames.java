@@ -13,6 +13,13 @@ import hlpdev.oregontrail.records.PartyMember;
 import java.util.List;
 
 public class ChoosePartyNames {
+
+    /**
+     * Displays a menu to choose the names of the other members of the player's party
+     * @param terminal
+     * @param screen
+     * @throws Exception
+     */
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();

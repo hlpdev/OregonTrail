@@ -17,6 +17,12 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class LoadMenu {
+    /**
+     * Creates the load menu & loads all save files & displays them to the user.
+     * Loads a game from where they left of if a save is selected.
+     * @param terminal
+     * @param screen
+     */
     public static void Execute(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow("Main Menu");

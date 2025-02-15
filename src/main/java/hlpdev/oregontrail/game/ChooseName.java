@@ -13,6 +13,13 @@ import hlpdev.oregontrail.records.PartyMember;
 import java.util.List;
 
 public class ChooseName {
+
+    /**
+     * Displays a menu to choose the player's name (as well as the save name)
+     * @param terminal
+     * @param screen
+     * @throws Exception
+     */
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();

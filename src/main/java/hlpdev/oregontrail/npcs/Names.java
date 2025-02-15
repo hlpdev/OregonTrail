@@ -34,6 +34,10 @@ public abstract class Names {
             "Buck \"No Luck\" Jenkins"
     };
 
+    /**
+     * Gets a random name from the names array
+     * @return A full (first & last) name
+     */
     public static String getRandomName() {
         return NAMES[(int) (Math.random() * NAMES.length)];
     }

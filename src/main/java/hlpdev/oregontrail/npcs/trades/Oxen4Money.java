@@ -13,7 +13,9 @@ import hlpdev.oregontrail.util.Pair;
 import java.util.Collections;
 import java.util.Random;
 
-
+/**
+ * Trades oxen for money
+ */
 @SuppressWarnings("unused")
 public final class Oxen4Money  implements Trade {
     public Oxen4Money() {

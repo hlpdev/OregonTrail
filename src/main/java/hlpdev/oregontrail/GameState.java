@@ -14,6 +14,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The GameState class stores the general save information
+ * for each journey the player starts. This class is serialized
+ * into JSON and stored in the player's application data and
+ * loaded when the player loads the save via the main menu.
+ */
 public class GameState implements Serializable {
 
     /**

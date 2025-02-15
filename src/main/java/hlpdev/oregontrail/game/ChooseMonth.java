@@ -11,6 +11,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class ChooseMonth {
+    /**
+     * Displays a menu to choose the starting month
+     * @param terminal
+     * @param screen
+     * @throws Exception
+     */
     public static void Execute(Terminal terminal, Screen screen) throws Exception {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
@@ -22,7 +28,7 @@ public class ChooseMonth {
         Label label = new Label("""
             It is 1848. Your jumping off
             place for Oregon is Independence,
-            Missouri. You must decide which 
+            Missouri. You must decide which
             month to leave Independence.
             """);
         label.setPosition(new TerminalPosition(2, 1));

@@ -5,6 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The Weather enum stores the types of weather that can occur on the oregon trail.
+ * Each type of weather stores a speed multiplier, health impact multiplier, food consumption multiplier,
+ * sickness multiplier, and randomness weight (used for deciding the next type of weather at random)
+ */
 public enum Weather {
     CLEAR("Clear", 1, 1, 1, 0.5, 7),
     SUNNY("Sunny", 1.1, 1, 0.9, 0.5, 4),

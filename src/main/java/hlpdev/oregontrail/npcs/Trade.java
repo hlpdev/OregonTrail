@@ -7,6 +7,9 @@ import hlpdev.oregontrail.util.Pair;
 
 import java.util.ArrayList;
 
+/**
+ * An interface used to store random traders that they player can encounter
+ */
 public interface Trade {
     ArrayList<Pair<Integer, Integer>> PriceVariants = new ArrayList<>();
 

@@ -13,6 +13,12 @@ import hlpdev.oregontrail.util.Utilities;
 import java.util.List;
 
 public class SettingsMenu {
+
+    /**
+     * Displays the settings menu to the player
+     * @param terminal
+     * @param screen
+     */
     public static void Execute(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow("Main Menu");

@@ -23,6 +23,11 @@ public class GeneralStore {
     private static int purchasingMedicine = 0;
     private static int purchasingOxen = 0;
 
+    /**
+     * Display's the store as well as buttons to buy a specific product
+     * @param terminal
+     * @param screen
+     */
     public static void Execute(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();

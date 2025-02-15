@@ -2,6 +2,13 @@ package hlpdev.oregontrail.enums;
 
 import java.util.Arrays;
 
+/**
+ * The Pace enum stores which paces the player can travel at
+ * Each pace stores a visual representation, a speed multiplier, a health impact multiplier,
+ * a food consumption multiplier, and a sickness chance
+ * <p>
+ * I made this early on and some fields are not fully used
+ */
 public enum Pace {
     STEADY("Steady", 1, 1, 1, 0.01),
     STRENUOUS("Strenuous", 1.5, 1.2, 1.2, 0.05),

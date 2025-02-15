@@ -13,7 +13,9 @@ import hlpdev.oregontrail.util.Pair;
 import java.util.Collections;
 import java.util.Random;
 
-
+/**
+ * Trades wagon tongues for money
+ */
 @SuppressWarnings("unused")
 public final class WagonTongue4Money  implements Trade {
     public WagonTongue4Money() {
