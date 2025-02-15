@@ -325,6 +325,35 @@ public class Progress {
                 return;
             }
 
+            if (new Random().nextInt(1, 10) > 9) {
+                MessageDialog.showMessageDialog(textGui, "", "One of your oxen has fallen ill and died.", MessageDialogButton.OK);
+                Main.GameState.oxen -= 1;
+
+                if (Main.GameState.oxen <= 0) {
+                    MessageDialog.showMessageDialog(textGui, "", "You have ran out of oxen and you are stranded in the middle of nowhere. Your journey is over.", MessageDialogButton.OK);
+                    System.exit(0);
+                }
+
+                return;
+            }
+
+            if (new Random().nextInt(1, 10) > 8) {
+                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+
+                MessageDialog.showMessageDialog(textGui, "", String.format("%s accidentally ripped and ruined their clothing.", member.name()), MessageDialogButton.OK);
+
+                if (Main.GameState.clothing > 0) {
+                    Main.GameState.clothing -= 1;
+                    MessageDialog.showMessageDialog(textGui, "", String.format("You gave 1 extra set of clothing to %s.", member.name()), MessageDialogButton.OK);
+                    return;
+                }
+
+                MessageDialog.showMessageDialog(textGui, "", String.format("With no extra sets of clothing, %s got hypothermia and died.", member.name()), MessageDialogButton.OK);
+                Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false).newHealth(0));
+
+                return;
+            }
+
             if (!Main.GameState.hasBearAttack && new Random().nextInt(1, 10) > 7) {
                 PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
 
@@ -447,7 +476,6 @@ public class Progress {
                 }
 
                 Main.GameState.hasBanditAttack = true;
-                return;
             }
         }
     }
