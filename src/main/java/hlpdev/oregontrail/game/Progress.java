@@ -247,8 +247,6 @@ public class Progress {
 
     /**
      * Handles moving forward on the oregon trail. Handles party member death, and random events.
-     * @param terminal
-     * @param screen
      */
     private static void Continue(Terminal terminal, Screen screen) {
         try {
@@ -338,8 +336,6 @@ public class Progress {
 
     /**
      * Internal logic for random events that occur while on the trail or while resting
-     * @param textGui
-     * @param atPointOfInterest
      */
     private static void DoRandomEvent(WindowBasedTextGUI textGui, boolean atPointOfInterest) {
         if (!atPointOfInterest) {
@@ -555,8 +551,6 @@ public class Progress {
 
     /**
      * Displays all the supplies that are in stockpile
-     * @param terminal
-     * @param screen
      */
     private static void CheckSupplies(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
@@ -608,8 +602,6 @@ public class Progress {
 
     /**
      * Shows the player their current location relative to points of interest
-     * @param terminal
-     * @param screen
      */
     private static void ShowMap(Terminal terminal, Screen screen) {
         boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
@@ -662,8 +654,6 @@ public class Progress {
 
     /**
      * Displays a menu to change the pace of the group
-     * @param terminal
-     * @param screen
      */
     private static void ChangePace(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
@@ -710,8 +700,6 @@ public class Progress {
     /**
      * Allows the group to stop and rest which refills stamina but can cause random events if they
      * are not at a point of interest.
-     * @param terminal
-     * @param screen
      */
     private static void StopToRest(Terminal terminal, Screen screen) {
         boolean atPointOfInterest = Location.isCloseToPointOfInterest(Main.GameState.totalDistanceTraveled);
@@ -776,8 +764,6 @@ public class Progress {
     /**
      * Shows a menu which allows you to trade with a random trader if there are still trades available
      * at a given point of interest.
-     * @param terminal
-     * @param screen
      */
     private static void AttemptToTrade(Terminal terminal, Screen screen) {
         Location pointOfInterest = Objects.requireNonNull(Location.getPointOfInterest(Main.GameState.totalDistanceTraveled));
@@ -804,8 +790,6 @@ public class Progress {
 
     /**
      * Allows the player to check the health status of the party members.
-     * @param terminal
-     * @param screen
      */
     private static void TalkToPeople(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
@@ -861,9 +845,6 @@ public class Progress {
 
     /**
      * Shows a menu when talking to a specific party member
-     * @param terminal
-     * @param screen
-     * @param name
      */
     private static void TalkToPerson(Terminal terminal, Screen screen, String name) {
         PartyMember member = Main.GameState.partyMembers.stream().filter(partyMember -> partyMember.name().equals(name)).findFirst().get();
@@ -933,8 +914,6 @@ public class Progress {
 
     /**
      * Handles hunting, removes ammo & gives food at random.
-     * @param terminal
-     * @param screen
      */
     private static void GoHunting(Terminal terminal, Screen screen) {
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
