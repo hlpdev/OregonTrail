@@ -249,6 +249,10 @@ public class Progress {
 
         Main.GameState.totalDistanceTraveled += daysToWalk * new Random().nextInt(10);
 
+        if (Main.GameState.totalDistanceTraveled >= Location.OREGON_CITY.location - 10) {
+            ReachedOregon.Execute(terminal, screen);
+        }
+
         Main.GameState.currentDay += daysToWalk;
         Main.GameState.daysElapsed += daysToWalk;
 
