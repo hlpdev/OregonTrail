@@ -31,7 +31,12 @@ public class Progress {
 
         List<PartyMember> partyMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
         List<Integer> partyHealths = partyMembers.stream().map(PartyMember::health).toList();
-        int averageHealth = Math.average(partyHealths.toArray(new Integer[0]));
+        int averageHealth;
+        if (!partyHealths.isEmpty()) {
+            averageHealth = Math.average(partyHealths.toArray(new Integer[0]));
+        } else {
+            averageHealth = 100;
+        }
 
         String healthVisual;
         if (averageHealth > 80) {
@@ -267,7 +272,7 @@ public class Progress {
         }
 
         int foodToRemove = new Random().nextInt((int)(50 * Main.GameState.pace.foodConsumptionMultiplier));
-        int foodPerMember = foodToRemove / Main.GameState.partyMembers.size();
+        int foodPerMember = foodToRemove / java.lang.Math.max(Main.GameState.partyMembers.size(), 1);
 
         if (foodToRemove <= Main.GameState.food) {
             Main.GameState.food -= foodToRemove;
@@ -287,7 +292,7 @@ public class Progress {
         }
 
         for (PartyMember member : Main.GameState.partyMembers) {
-            if (member.health() <= 0 && new Random().nextBoolean()) {
+            if (member.health() <= 0 && member.isAlive()) {
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false));
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s has died. You can bury them next time you rest for a few days.", member.name()));
             }
@@ -639,7 +644,7 @@ public class Progress {
         }
 
         int foodToRemove = new Random().nextInt(50);
-        int foodPerMember = foodToRemove / Main.GameState.partyMembers.size();
+        int foodPerMember = foodToRemove / java.lang.Math.max(Main.GameState.partyMembers.size(), 1);
 
         if (foodToRemove <= Main.GameState.food) {
             Main.GameState.food -= foodToRemove;
@@ -653,7 +658,7 @@ public class Progress {
         }
 
         for (PartyMember member : Main.GameState.partyMembers) {
-            if (member.health() <= 0) {
+            if (member.health() <= 0 && member.isAlive()) {
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false));
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s has died. You can bury them next time you rest for a few days.", member.name()));
             }
