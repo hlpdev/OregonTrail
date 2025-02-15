@@ -66,15 +66,6 @@ public class Progress {
             staminaVisual = "Low";
         }
 
-        String moraleVisual;
-        if (Main.GameState.morale > 70) {
-            moraleVisual = "Good";
-        } else if (Main.GameState.morale > 40) {
-            moraleVisual = "Ok";
-        } else {
-            moraleVisual = "Bad";
-        }
-
         final WindowBasedTextGUI textGui = new MultiWindowTextGUI(screen);
         final Window window = new BasicWindow();
         window.setFixedSize(new TerminalSize(62, 28));
@@ -93,9 +84,8 @@ public class Progress {
                   Health: %s
                   Stamina: %s
                   Pace: %s
-                  Morale: %s
                   Rations: %s
-                """, currentWeather.visualRepresentation, healthVisual, staminaVisual, Main.GameState.pace.visualRepresentation, moraleVisual, rationsVisual));
+                """, currentWeather.visualRepresentation, healthVisual, staminaVisual, Main.GameState.pace.visualRepresentation, rationsVisual));
         statusLabel.setPosition(new TerminalPosition(2, 4));
         statusLabel.setSize(new TerminalSize(40, 6));
         panel.addComponent(statusLabel);
