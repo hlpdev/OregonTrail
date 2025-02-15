@@ -12,7 +12,7 @@ an actual game.
 * Any platform that supports JDK 23 and Windowing
 
 ### Prerequisites
-* OpenJDK 23
+* OpenJDK 23 or any other Java fork that has support for language level 23
   * [Download OpenJDK](https://jdk.java.net/)
   * Verify installation: 
     ```shell
