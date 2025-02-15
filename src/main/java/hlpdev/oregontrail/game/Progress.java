@@ -321,7 +321,13 @@ public class Progress {
     private static void DoRandomEvent(WindowBasedTextGUI textGui, boolean atPointOfInterest) {
         if (!atPointOfInterest) {
             if (!Main.GameState.hasSnakeAttack && new Random().nextInt(1, 10) > 7) {
-                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+                List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                if (aliveMembers.isEmpty()) {
+                    return;
+                }
+
+                PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
 
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(90))));
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s got bitten by a snake and has suffered major injuries! Make sure to check on them soon!", member.name()));
@@ -343,7 +349,13 @@ public class Progress {
             }
 
             if (new Random().nextInt(1, 10) > 8) {
-                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+                List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                if (aliveMembers.isEmpty()) {
+                    return;
+                }
+
+                PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
 
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s accidentally ripped and ruined their clothing.", member.name()), MessageDialogButton.OK);
 
@@ -360,7 +372,13 @@ public class Progress {
             }
 
             if (!Main.GameState.hasBearAttack && new Random().nextInt(1, 10) > 7) {
-                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+                List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                if (aliveMembers.isEmpty()) {
+                    return;
+                }
+
+                PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
 
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))));
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s got attacked by a bear and has suffered major injuries! Make sure to check on them soon!", member.name()));
@@ -413,7 +431,13 @@ public class Progress {
 
             if (!Main.GameState.hasRandomDeath && new Random().nextInt(1, 10) > 9) {
                 // Random death
-                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+                List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                if (aliveMembers.isEmpty()) {
+                    return;
+                }
+
+                PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
 
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newAlive(false).newHealth(0));
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s had a heart attack and died. You can bury them next time you rest for a few days.", member.name()));
@@ -424,7 +448,13 @@ public class Progress {
 
             // Random sickness
             if (new Random().nextInt(1, 10) > 7) {
-                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+                List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                if (aliveMembers.isEmpty()) {
+                    return;
+                }
+
+                PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
 
                 Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(java.lang.Math.max(0, member.health() - new Random().nextInt(60))).newDisease(true));
                 MessageDialog.showMessageDialog(textGui, "", String.format("%s has fallen ill. Give them medication to reduce the risk of death.", member.name()));
@@ -463,7 +493,14 @@ public class Progress {
                                 MessageDialog.showMessageDialog(textGui, "", "The shot hit you in the head. Your journey is over.", MessageDialogButton.OK);
                                 System.exit(0);
                             } else {
-                                PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
+                                List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                                if (aliveMembers.isEmpty()) {
+                                    MessageDialog.showMessageDialog(textGui, "", "They missed and ran away.", MessageDialogButton.OK);
+                                    return;
+                                }
+
+                                PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
 
                                 MessageDialog.showMessageDialog(textGui, "", String.format("The shot hit %s causing a critical injury.", member.name()), MessageDialogButton.OK);
 
@@ -471,9 +508,17 @@ public class Progress {
                             }
                         }
                     } else {
-                        PartyMember member = Main.GameState.partyMembers.get(new Random().nextInt(Main.GameState.partyMembers.size()));
-
                         MessageDialog.showMessageDialog(textGui, "", "You shot and missed while aiming at one of the bandits.", MessageDialogButton.OK);
+
+                        List<PartyMember> aliveMembers = Main.GameState.partyMembers.stream().filter(PartyMember::isAlive).toList();
+
+                        if (aliveMembers.isEmpty()) {
+                            MessageDialog.showMessageDialog(textGui, "", "They fired back and missed, running away in the processes.", MessageDialogButton.OK);
+                            return;
+                        }
+
+                        PartyMember member = aliveMembers.get(new Random().nextInt(aliveMembers.size()));
+
                         MessageDialog.showMessageDialog(textGui, "", String.format("They pulled a gun out and shot %s causing a critical injury and ran away.", member.name()), MessageDialogButton.OK);
 
                         Main.GameState.partyMembers.set(Main.GameState.partyMembers.indexOf(member), member.newHealth(new Random().nextInt(65)));
